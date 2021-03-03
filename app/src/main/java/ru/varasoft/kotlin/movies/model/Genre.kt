@@ -1,4 +1,4 @@
-package ru.varasoft.kotlin.movies
+package ru.varasoft.kotlin.movies.model
 
 sealed class Genre {
     class Horror : Genre()

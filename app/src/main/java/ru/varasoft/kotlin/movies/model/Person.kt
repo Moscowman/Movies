@@ -1,4 +1,4 @@
-package ru.varasoft.kotlin.movies
+package ru.varasoft.kotlin.movies.model
 
 import java.util.*
 
