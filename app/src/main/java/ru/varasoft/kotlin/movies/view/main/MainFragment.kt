@@ -1,4 +1,4 @@
-package ru.varasoft.kotlin.movies.view
+package ru.varasoft.kotlin.movies.view.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,14 +9,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import ru.varasoft.kotlin.movies.R
-import ru.varasoft.kotlin.movies.databinding.MainFragmentBinding
+import ru.varasoft.kotlin.movies.databinding.FragmentMainBinding
 import ru.varasoft.kotlin.movies.model.Movie
 import ru.varasoft.kotlin.movies.viewmodel.AppState
 import ru.varasoft.kotlin.movies.viewmodel.MainViewModel
 
 class MainFragment : Fragment() {
 
-    private var _binding: MainFragmentBinding? = null
+    private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: MainViewModel
 
@@ -24,7 +24,7 @@ class MainFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-        _binding = MainFragmentBinding.inflate(inflater, container, false)
+        _binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.getRoot()
     }
 
@@ -62,6 +62,11 @@ class MainFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    interface OnItemViewClickListener {
+        fun onItemViewClick(movie: Movie)
+    }
+
 
     companion object {
         fun newInstance() = MainFragment()
