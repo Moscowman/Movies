@@ -80,6 +80,8 @@ class MainFragmentAdapter(private var onItemViewClickListener: MainFragment.OnIt
             val calendar: Calendar = Calendar.getInstance()
             calendar.setTime(item.releaseDate ?: Date())
             binding.yearOfReleaseTextView.text = calendar.get(Calendar.YEAR).toString()
+            binding.posterImageView.setImageResource(R.drawable.abstract_poster)
+            binding.ratingImageView.setImageResource(R.drawable.star)
         }
     }
 
