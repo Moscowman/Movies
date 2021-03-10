@@ -40,7 +40,7 @@ fun getMovies(): List<Movie> {
                 Person("Дункан", "Майкл Кларк")
             ),
             mutableListOf(Person("Дарабонт", "Фрэнк"), Person("Кинг", "Стивен")),
-            DateFormat.getDateInstance().parse("1999"),
+            DateFormat.getDateInstance(DateFormat.SHORT).parse("01.01.1999"),
             60_000_000,
             290_701_374,
             mutableListOf(Genre.Drama, Genre.Fantasy),
@@ -57,7 +57,7 @@ fun getMovies(): List<Movie> {
                 Person("Пэкстон", "Билл")
             ),
             mutableListOf(Person("Кэмерон", "Джеймс")),
-            DateFormat.getDateInstance().parse("1997"),
+            DateFormat.getDateInstance(DateFormat.SHORT).parse("01.01.1999"),
             200_000_000,
             2_194_439_542,
             mutableListOf(Genre.Drama, Genre.Melodrama, Genre.Catastrophe),
@@ -77,7 +77,7 @@ fun getMovies(): List<Movie> {
                 Person("Мур", "Джоэл Дэвид"),
             ),
             mutableListOf(Person("Кэмерон", "Джеймс")),
-            DateFormat.getDateInstance().parse("2009"),
+            DateFormat.getDateInstance(DateFormat.SHORT).parse("01.01.1999"),
             237_000_000,
             2_790_439_000,
             mutableListOf(Genre.Drama, Genre.Action, Genre.Adventure, Genre.ScienceFiction),
