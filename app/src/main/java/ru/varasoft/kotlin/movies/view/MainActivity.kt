@@ -3,6 +3,7 @@ package ru.varasoft.kotlin.movies.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import ru.varasoft.kotlin.movies.R
+import ru.varasoft.kotlin.movies.view.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
