@@ -13,7 +13,7 @@ import com.google.gson.Gson
 import ru.varasoft.kotlin.movies.BuildConfig
 import ru.varasoft.kotlin.movies.databinding.FragmentDetailsBinding
 import ru.varasoft.kotlin.movies.model.Movie
-import ru.varasoft.kotlin.movies.model.MovieDTO
+import ru.varasoft.kotlin.movies.model.MovieInListDTO
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.MalformedURLException
@@ -35,7 +35,6 @@ class DetailsFragment : Fragment() {
         return binding.getRoot()
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val movie = arguments?.getParcelable<Movie>(BUNDLE_EXTRA)
@@ -44,7 +43,6 @@ class DetailsFragment : Fragment() {
         }
         binding.mainView.visibility = View.GONE
         binding.loadingLayout.visibility = View.VISIBLE
-        loadMovie()
     }
 
     override fun onDestroyView() {
@@ -52,63 +50,16 @@ class DetailsFragment : Fragment() {
         _binding = null
     }
 
-    private fun displayMovie(movieDTO: MovieDTO) {
+    private fun displayMovie(movieInListDTO: MovieInListDTO) {
         with(binding) {
             mainView.visibility = View.VISIBLE
             loadingLayout.visibility = View.GONE
-            movieOriginalName.text = movieDTO.originalName
-            movieRussianName.text = movieDTO.russianName
-            genres.text = movieDTO.russianName
-            length.text = "$movieDTO.length мин."
-            rating.text = "$movieDTO.rating (${movieDTO.usersRated})"
-            budget.text = "Бюджет: ${movieDTO.budget}"
-            revenue.text = "Сборы: ${movieDTO.revenue}"
-            releaseDate.text = movieDTO.releaseDate.toString()
-            plot.text = movieDTO.plot
+            movieOriginalName.text = movieInListDTO.original_title
+            movieRussianName.text = movieInListDTO.title
+            rating.text = "${movieInListDTO.vote_average}"
+            releaseDate.text = movieInListDTO.release_date
+            plot.text = movieInListDTO.overview
         }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun loadMovie() {
-        try {
-            val uri =
-                URL("https://api.tmdb.org/4/discover?lat=${movieBundle.originalName}")
-            val handler = Handler()
-            Thread(Runnable {
-                lateinit var urlConnection: HttpsURLConnection
-                try {
-                    urlConnection = uri.openConnection() as HttpsURLConnection
-                    urlConnection.requestMethod = "GET"
-                    urlConnection.addRequestProperty(
-                        "TheMovieDB-API-Key",
-                        BuildConfig.THEMOVIEDB_API_KEY
-                    )
-                    urlConnection.readTimeout = 10000
-                    val bufferedReader =
-                        BufferedReader(InputStreamReader(urlConnection.inputStream))
-
-                    // преобразование ответа от сервера (JSON) в модель данных (WeatherDTO)
-                    val movieDTO: MovieDTO =
-                        Gson().fromJson(getLines(bufferedReader), MovieDTO::class.java)
-                    handler.post { displayMovie(movieDTO) }
-                } catch (e: Exception) {
-                    Log.e("", "Fail connection", e)
-                    e.printStackTrace()
-                    //Обработка ошибки
-                } finally {
-                    urlConnection.disconnect()
-                }
-            }).start()
-        } catch (e: MalformedURLException) {
-            Log.e("", "Fail URI", e)
-            e.printStackTrace()
-            //Обработка ошибки
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun getLines(reader: BufferedReader): String {
-        return reader.lines().collect(Collectors.joining("\n"))
     }
 
     companion object {
