@@ -25,8 +25,8 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val movie = arguments?.getParcelable<MovieInListDTO>(BUNDLE_EXTRA)
-        if (movie != null) binding.apply {
-
+        if (movie != null) {
+            displayMovie(movie)
         }
         binding.mainView.visibility = View.GONE
         binding.loadingLayout.visibility = View.VISIBLE
@@ -36,6 +36,19 @@ class DetailsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    private fun displayMovie(movie: MovieInListDTO) {
+        with(binding) {
+            mainView.visibility = View.VISIBLE
+            loadingLayout.visibility = View.GONE
+            movieOriginalName.text = movie.original_title
+            movieRussianName.text = movie.title
+            rating.text = "${movie.vote_average}"
+            releaseDate.text = movie.release_date
+            plot.text = movie.overview
+        }
+    }
+
 
     companion object {
 

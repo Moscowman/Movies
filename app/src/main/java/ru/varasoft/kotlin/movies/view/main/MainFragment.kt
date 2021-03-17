@@ -2,6 +2,8 @@ package ru.varasoft.kotlin.movies.view.main
 
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,9 +55,7 @@ class MainFragment : Fragment() {
         binding.mainFragmentReleasedMoviesRecyclerView.adapter = releasedMovieAdapter
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
-        viewModel.getMoviesFromLocalSource()
-        repository.getMoviesFromServer()
-
+        viewModel.getMoviesFromRemoteSource()
     }
 
     private fun renderData(appState: AppState) {
@@ -101,17 +101,6 @@ class MainFragment : Fragment() {
         fun onItemViewClick(movie: MovieInListDTO)
     }
 
-    private fun displayMoviesList(moviesList: List<MovieInListDTO>) {
-        with(binding) {
-            mainView.visibility = View.VISIBLE
-            loadingLayout.visibility = View.GONE
-/*            movieOriginalName.text = movieInListDTO.original_title
-            movieRussianName.text = movieInListDTO.title
-            rating.text = "${movieInListDTO.vote_average}"
-            releaseDate.text = movieInListDTO.release_date
-            plot.text = movieInListDTO.overview*/
-        }
-    }
 
     companion object {
         fun newInstance() = MainFragment()
