@@ -2,8 +2,6 @@ package ru.varasoft.kotlin.movies.view.main
 
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,29 +10,23 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
-import ru.varasoft.kotlin.movies.BuildConfig
 import ru.varasoft.kotlin.movies.R
 import ru.varasoft.kotlin.movies.databinding.FragmentMainBinding
-import ru.varasoft.kotlin.movies.model.Movie
 import ru.varasoft.kotlin.movies.model.MovieInListDTO
+import ru.varasoft.kotlin.movies.model.RepositoryImpl
 import ru.varasoft.kotlin.movies.view.details.DetailsFragment
 import ru.varasoft.kotlin.movies.viewmodel.AppState
 import ru.varasoft.kotlin.movies.viewmodel.MainViewModel
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.MalformedURLException
-import java.net.URL
-import java.util.stream.Collectors
-import javax.net.ssl.HttpsURLConnection
 
 class MainFragment : Fragment() {
+
+    private val repository = RepositoryImpl()
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: MainViewModel
     private val releasedMovieAdapter = MainFragmentAdapter(object : OnItemViewClickListener {
-        override fun onItemViewClick(movie: Movie) {
+        override fun onItemViewClick(movie: MovieInListDTO) {
             val manager = activity?.supportFragmentManager
             if (manager != null) {
                 val bundle = Bundle()
@@ -62,7 +54,8 @@ class MainFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
         viewModel.getMoviesFromLocalSource()
-        loadMoviesList()
+        repository.getMoviesFromServer()
+
     }
 
     private fun renderData(appState: AppState) {
@@ -105,52 +98,19 @@ class MainFragment : Fragment() {
     }
 
     interface OnItemViewClickListener {
-        fun onItemViewClick(movie: Movie)
+        fun onItemViewClick(movie: MovieInListDTO)
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun loadMoviesList() {
-        try {
-            val uri =
-                URL("https://api.tmdb.org/4/discover/movie?primary_release_year=2021&sort_by=vote_average.desc&page=1")
-            val handler = Handler()
-            Thread(Runnable {
-                lateinit var urlConnection: HttpsURLConnection
-                try {
-                    urlConnection = uri.openConnection() as HttpsURLConnection
-                    urlConnection.requestMethod = "GET"
-                    urlConnection.setRequestProperty(
-                        "Authorization",
-                        "Bearer " + BuildConfig.THEMOVIEDB_API_KEY
-                    )
-                    urlConnection.setRequestProperty(
-                        "Content-Type",
-                        "application/json;charset=utf-8"
-                    )
-                    urlConnection.readTimeout = 10000
-                    val bufferedReader =
-                        BufferedReader(InputStreamReader(urlConnection.inputStream))
-
-                    val moviesListDTO: List<MovieInListDTO> =
-                        Gson().fromJson(getLines(bufferedReader), Array<MovieInListDTO>::class.java).toList()
-                    //handler.post { displayMovie(movieInListDTO) }
-                } catch (e: Exception) {
-                    Log.e("", "Fail connection", e)
-                    e.printStackTrace()
-                } finally {
-                    urlConnection.disconnect()
-                }
-            }).start()
-        } catch (e: MalformedURLException) {
-            Log.e("", "Fail URI", e)
-            e.printStackTrace()
+    private fun displayMoviesList(moviesList: List<MovieInListDTO>) {
+        with(binding) {
+            mainView.visibility = View.VISIBLE
+            loadingLayout.visibility = View.GONE
+/*            movieOriginalName.text = movieInListDTO.original_title
+            movieRussianName.text = movieInListDTO.title
+            rating.text = "${movieInListDTO.vote_average}"
+            releaseDate.text = movieInListDTO.release_date
+            plot.text = movieInListDTO.overview*/
         }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun getLines(reader: BufferedReader): String {
-        val lines = reader.lines().collect(Collectors.joining("\n"))
-        return lines
     }
 
     companion object {

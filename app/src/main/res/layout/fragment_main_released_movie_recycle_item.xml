@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/russianNameTextView"
+        android:id="@+id/movie_name_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_15_dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/russianNameTextView" />
+        app:layout_constraintTop_toBottomOf="@id/movie_name_text_view" />
 
     <TextView
         android:id="@+id/ratingTextView"

@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class MovieInListDTO (
+    val genre_ids: Array<Int>,
     val id: Int?,
     val original_language: String?,
     val original_title: String? = "",
@@ -13,8 +14,7 @@ data class MovieInListDTO (
     val poster_path: String? = null,
     val release_date: String? = null,
     val title: String? = "",
-    val genre: List<Genre>? = listOf(),
     val video: Boolean,
-    val vote_average: Int? = 0,
+    val vote_average: Float? = 0F,
     val vote_count: Int? = 0
 ) : Parcelable
