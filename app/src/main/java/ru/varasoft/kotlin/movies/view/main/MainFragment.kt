@@ -1,5 +1,6 @@
 package ru.varasoft.kotlin.movies.view.main
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -7,11 +8,13 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
+import ru.varasoft.kotlin.movies.ConnectivityListener
 import ru.varasoft.kotlin.movies.R
 import ru.varasoft.kotlin.movies.databinding.FragmentMainBinding
 import ru.varasoft.kotlin.movies.model.MovieInListDTO
@@ -56,6 +59,19 @@ class MainFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
         viewModel.getMoviesFromRemoteSource()
+
+        val connectivityListener = ConnectivityListener(activity!!)
+        connectivityListener.getLiveData().observe(
+            viewLifecycleOwner,
+            Observer {
+                Toast.makeText(
+                    activity,
+                    if (it) "Сеть доступна" else "Сеть недоступна",
+                    Toast.LENGTH_SHORT
+                ).show()
+            })
+
+
     }
 
     private fun renderData(appState: AppState) {
