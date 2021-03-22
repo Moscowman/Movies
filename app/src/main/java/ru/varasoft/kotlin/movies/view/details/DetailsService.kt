@@ -18,7 +18,7 @@ import java.util.stream.Collectors
 import javax.net.ssl.HttpsURLConnection
 
 private val ACTION_LOAD_MOVIES = "ru.varasoft.kotlin.movies.model.action.load_movies"
-private val MOVIE_ID_EXTRA = "ru.varasoft.kotlin.movies.model.extra.MOVIE_ID"
+val MOVIE_EXTRA = "ru.varasoft.kotlin.movies.model.extra.MOVIE"
 val DETAILS_INTENT_FILTER = "DETAILS INTENT FILTER"
 val DETAILS_LOAD_RESULT_EXTRA = "LOAD RESULT"
 val DETAILS_RESPONSE_EMPTY_EXTRA = "RESPONSE IS EMPTY"
@@ -31,7 +31,7 @@ class DetailsService(name: String = "DetailsService") : IntentService(name) {
     override fun onHandleIntent(intent: Intent?) {
         when (intent?.action) {
             ACTION_LOAD_MOVIES -> {
-                val movieId = intent.getIntExtra(MOVIE_ID_EXTRA, -1)
+                val movieId = intent.getIntExtra(MOVIE_EXTRA, -1)
                 loadMovie(movieId)
             }
         }
@@ -89,7 +89,7 @@ class DetailsService(name: String = "DetailsService") : IntentService(name) {
 
     private fun onSuccessResponse(movieInListDTO: MovieInListDTO) {
         putLoadResult(DETAILS_RESPONSE_SUCCESS_EXTRA)
-        broadcastIntent.putExtra(MOVIE_ID_EXTRA, movieInListDTO.id)
+        broadcastIntent.putExtra(MOVIE_EXTRA, movieInListDTO)
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent)
     }
 
@@ -107,7 +107,7 @@ class DetailsService(name: String = "DetailsService") : IntentService(name) {
         fun startActionLoadMovies(context: Context, movieId: Int) {
             val intent = Intent(context, DetailsService::class.java).apply {
                 action = ACTION_LOAD_MOVIES
-                putExtra(MOVIE_ID_EXTRA, movieId)
+                putExtra(MOVIE_EXTRA, movieId)
             }
             context.startService(intent)
         }

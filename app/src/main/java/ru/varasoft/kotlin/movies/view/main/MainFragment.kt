@@ -1,10 +1,7 @@
 package ru.varasoft.kotlin.movies.view.main
 
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,14 +15,11 @@ import ru.varasoft.kotlin.movies.ConnectivityListener
 import ru.varasoft.kotlin.movies.R
 import ru.varasoft.kotlin.movies.databinding.FragmentMainBinding
 import ru.varasoft.kotlin.movies.model.MovieInListDTO
-import ru.varasoft.kotlin.movies.model.RepositoryImpl
 import ru.varasoft.kotlin.movies.view.details.DetailsFragment
 import ru.varasoft.kotlin.movies.viewmodel.AppState
 import ru.varasoft.kotlin.movies.viewmodel.MainViewModel
 
 class MainFragment : Fragment() {
-
-    private val repository = RepositoryImpl()
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
@@ -70,8 +64,6 @@ class MainFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             })
-
-
     }
 
     private fun renderData(appState: AppState) {
@@ -116,7 +108,6 @@ class MainFragment : Fragment() {
     interface OnItemViewClickListener {
         fun onItemViewClick(movie: MovieInListDTO)
     }
-
 
     companion object {
         fun newInstance() = MainFragment()

@@ -26,7 +26,7 @@ class RepositoryImpl : Repository {
         try {
             var totalPages = 1
             var page = 1
-            while (page <= totalPages) {
+            while (page <= 1/*totalPages*/) {
                 val uri =
                     URL("https://api.tmdb.org/4/discover/movie?primary_release_year=2021&sort_by=vote_average.desc&page=$page")
                 lateinit var urlConnection: HttpsURLConnection

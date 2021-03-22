@@ -3,16 +3,18 @@ package ru.varasoft.kotlin.movies.view.details
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import ru.varasoft.kotlin.movies.databinding.FragmentDetailsBinding
 import ru.varasoft.kotlin.movies.model.MovieInListDTO
 
 class DetailsFragment : Fragment() {
-    private val MOVIE_ID_EXTRA = "ru.varasoft.kotlin.movies.model.extra.MOVIE_ID"
+    private val MOVIE_EXTRA = "ru.varasoft.kotlin.movies.model.extra.MOVIE"
     val DETAILS_INTENT_FILTER = "DETAILS INTENT FILTER"
     val DETAILS_LOAD_RESULT_EXTRA = "LOAD RESULT"
     val DETAILS_INTENT_EMPTY_EXTRA = "INTENT IS EMPTY"
@@ -22,12 +24,9 @@ class DetailsFragment : Fragment() {
     val DETAILS_REQUEST_ERROR_MESSAGE_EXTRA = "REQUEST ERROR MESSAGE"
     val DETAILS_URL_MALFORMED_EXTRA = "URL MALFORMED"
     val DETAILS_RESPONSE_SUCCESS_EXTRA = "RESPONSE SUCCESS"
-    val DETAILS_FEELS_LIKE_EXTRA = "FEELS LIKE"
-    val DETAILS_CONDITION_EXTRA = "CONDITION"
     private val PROCESS_ERROR = "Обработка ошибки"
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
-    private lateinit var movieBundle: MovieInListDTO
 
     private val loadResultsReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -38,23 +37,30 @@ class DetailsFragment : Fragment() {
                 DETAILS_REQUEST_ERROR_EXTRA -> TODO(PROCESS_ERROR)
                 DETAILS_REQUEST_ERROR_MESSAGE_EXTRA -> TODO(PROCESS_ERROR)
                 DETAILS_URL_MALFORMED_EXTRA -> TODO(PROCESS_ERROR)
-                DETAILS_RESPONSE_SUCCESS_EXTRA -> displayMovie(
-                    MovieInListDTO(
-                        intent.getIntExtra(
-                            MOVIE_ID_EXTRA, TEMP_INVALID
-                        ),
-                        intent.getIntExtra(
-                            DETAILS_FEELS_LIKE_EXTRA,
-                            FEELS_LIKE_INVALID
-                        ),
-                        intent.getStringExtra(
-                            DETAILS_CONDITION_EXTRA
-                        )
-                    )
-                )
+                DETAILS_RESPONSE_SUCCESS_EXTRA -> {
+                    var movieInListDTO: MovieInListDTO? =
+                        intent.getParcelableExtra(MOVIE_EXTRA)
+                    if (movieInListDTO != null)
+                        displayMovie(movieInListDTO)
+                }
                 else -> TODO(PROCESS_ERROR)
             }
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        context?.let {
+            LocalBroadcastManager.getInstance(it)
+                .registerReceiver(loadResultsReceiver, IntentFilter(DETAILS_INTENT_FILTER))
+        }
+    }
+
+    override fun onDestroy() {
+        context?.let {
+            LocalBroadcastManager.getInstance(it).unregisterReceiver(loadResultsReceiver)
+        }
+        super.onDestroy()
     }
 
     override fun onCreateView(
@@ -62,7 +68,7 @@ class DetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
-        return binding.getRoot()
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -94,9 +100,12 @@ class DetailsFragment : Fragment() {
 
     companion object {
 
-        const val BUNDLE_EXTRA = "weather"
+        const val BUNDLE_EXTRA = "movie"
 
-        fun newInstance(bundle: Bundle): DetailsFragment =
-            DetailsFragment().apply { arguments = bundle }
+        fun newInstance(bundle: Bundle): DetailsFragment {
+            val fragment = DetailsFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 }
