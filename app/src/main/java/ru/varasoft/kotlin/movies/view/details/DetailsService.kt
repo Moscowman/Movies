@@ -17,20 +17,13 @@ import java.net.URL
 import java.util.stream.Collectors
 import javax.net.ssl.HttpsURLConnection
 
-private val ACTION_LOAD_MOVIES = "ru.varasoft.kotlin.movies.model.action.load_movies"
-val MOVIE_EXTRA = "ru.varasoft.kotlin.movies.model.extra.MOVIE"
-val DETAILS_INTENT_FILTER = "DETAILS INTENT FILTER"
-val DETAILS_LOAD_RESULT_EXTRA = "LOAD RESULT"
-val DETAILS_RESPONSE_EMPTY_EXTRA = "RESPONSE IS EMPTY"
-val DETAILS_RESPONSE_SUCCESS_EXTRA = "RESPONSE SUCCESS"
-
 class DetailsService(name: String = "DetailsService") : IntentService(name) {
     private val broadcastIntent = Intent(DETAILS_INTENT_FILTER)
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onHandleIntent(intent: Intent?) {
         when (intent?.action) {
-            ACTION_LOAD_MOVIES -> {
+            ACTION_LOAD_MOVIE -> {
                 val movieId = intent.getIntExtra(MOVIE_EXTRA, -1)
                 loadMovie(movieId)
             }
@@ -89,7 +82,7 @@ class DetailsService(name: String = "DetailsService") : IntentService(name) {
 
     private fun onSuccessResponse(movieInListDTO: MovieInListDTO) {
         putLoadResult(DETAILS_RESPONSE_SUCCESS_EXTRA)
-        broadcastIntent.putExtra(MOVIE_EXTRA, movieInListDTO)
+        broadcastIntent.putExtra(DETAILS_LOAD_RESULT_EXTRA, movieInListDTO)
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent)
     }
 
@@ -100,16 +93,5 @@ class DetailsService(name: String = "DetailsService") : IntentService(name) {
 
     private fun putLoadResult(result: String) {
         broadcastIntent.putExtra(DETAILS_LOAD_RESULT_EXTRA, result)
-    }
-
-    companion object {
-        @JvmStatic
-        fun startActionLoadMovies(context: Context, movieId: Int) {
-            val intent = Intent(context, DetailsService::class.java).apply {
-                action = ACTION_LOAD_MOVIES
-                putExtra(MOVIE_EXTRA, movieId)
-            }
-            context.startService(intent)
-        }
     }
 }

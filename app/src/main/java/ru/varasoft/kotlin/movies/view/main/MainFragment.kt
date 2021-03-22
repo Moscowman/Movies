@@ -16,6 +16,7 @@ import ru.varasoft.kotlin.movies.R
 import ru.varasoft.kotlin.movies.databinding.FragmentMainBinding
 import ru.varasoft.kotlin.movies.model.MovieInListDTO
 import ru.varasoft.kotlin.movies.view.details.DetailsFragment
+import ru.varasoft.kotlin.movies.view.details.MOVIE_EXTRA
 import ru.varasoft.kotlin.movies.viewmodel.AppState
 import ru.varasoft.kotlin.movies.viewmodel.MainViewModel
 
@@ -29,7 +30,7 @@ class MainFragment : Fragment() {
             val manager = activity?.supportFragmentManager
             if (manager != null) {
                 val bundle = Bundle()
-                bundle.putParcelable(DetailsFragment.BUNDLE_EXTRA, movie)
+                bundle.putParcelable(MOVIE_EXTRA, movie)
                 manager.beginTransaction()
                     .add(R.id.container, DetailsFragment.newInstance(bundle))
                     .addToBackStack("")

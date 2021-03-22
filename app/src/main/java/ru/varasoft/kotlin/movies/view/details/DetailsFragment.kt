@@ -13,20 +13,25 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import ru.varasoft.kotlin.movies.databinding.FragmentDetailsBinding
 import ru.varasoft.kotlin.movies.model.MovieInListDTO
 
+val ACTION_LOAD_MOVIE = "ru.varasoft.kotlin.movies.model.action.load_movies"
+val MOVIE_EXTRA = "ru.varasoft.kotlin.movies.model.extra.MOVIE"
+val DETAILS_INTENT_FILTER = "DETAILS INTENT FILTER"
+val DETAILS_LOAD_RESULT_EXTRA = "LOAD RESULT"
+val DETAILS_INTENT_EMPTY_EXTRA = "INTENT IS EMPTY"
+val DETAILS_DATA_EMPTY_EXTRA = "DATA IS EMPTY"
+val DETAILS_RESPONSE_EMPTY_EXTRA = "RESPONSE IS EMPTY"
+val DETAILS_REQUEST_ERROR_EXTRA = "REQUEST ERROR"
+val DETAILS_REQUEST_ERROR_MESSAGE_EXTRA = "REQUEST ERROR MESSAGE"
+val DETAILS_URL_MALFORMED_EXTRA = "URL MALFORMED"
+val DETAILS_RESPONSE_SUCCESS_EXTRA = "RESPONSE SUCCESS"
+val PROCESS_ERROR = "Обработка ошибки"
+
 class DetailsFragment : Fragment() {
-    private val MOVIE_EXTRA = "ru.varasoft.kotlin.movies.model.extra.MOVIE"
-    val DETAILS_INTENT_FILTER = "DETAILS INTENT FILTER"
-    val DETAILS_LOAD_RESULT_EXTRA = "LOAD RESULT"
-    val DETAILS_INTENT_EMPTY_EXTRA = "INTENT IS EMPTY"
-    val DETAILS_DATA_EMPTY_EXTRA = "DATA IS EMPTY"
-    val DETAILS_RESPONSE_EMPTY_EXTRA = "RESPONSE IS EMPTY"
-    val DETAILS_REQUEST_ERROR_EXTRA = "REQUEST ERROR"
-    val DETAILS_REQUEST_ERROR_MESSAGE_EXTRA = "REQUEST ERROR MESSAGE"
-    val DETAILS_URL_MALFORMED_EXTRA = "URL MALFORMED"
-    val DETAILS_RESPONSE_SUCCESS_EXTRA = "RESPONSE SUCCESS"
-    private val PROCESS_ERROR = "Обработка ошибки"
+
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
+
+    private var movieBundle: MovieInListDTO? = null
 
     private val loadResultsReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -73,13 +78,24 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val movie = arguments?.getParcelable<MovieInListDTO>(BUNDLE_EXTRA)
-        if (movie != null) {
-            displayMovie(movie)
-        }
+        movieBundle = arguments?.getParcelable(MOVIE_EXTRA)
+        getMovie()
+    }
+
+    private fun getMovie() {
         binding.mainView.visibility = View.GONE
         binding.loadingLayout.visibility = View.VISIBLE
+        context?.let {
+            it.startService(Intent(it, DetailsService::class.java).apply {
+                action = ACTION_LOAD_MOVIE
+                putExtra(
+                    MOVIE_EXTRA,
+                    movieBundle?.id
+                )
+            })
+        }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -99,9 +115,6 @@ class DetailsFragment : Fragment() {
     }
 
     companion object {
-
-        const val BUNDLE_EXTRA = "movie"
-
         fun newInstance(bundle: Bundle): DetailsFragment {
             val fragment = DetailsFragment()
             fragment.arguments = bundle
