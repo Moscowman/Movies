@@ -34,14 +34,14 @@ class DetailsService(name: String = "DetailsService") : IntentService(name) {
     private fun loadMovie(movieId: Int) {
         try {
             val uri =
-                URL("https://api.tmdb.org/4/movie/${movieId}")
+                URL("https://api.tmdb.org/3/movie/${movieId}?api_key=${BuildConfig.THEMOVIEDB_API3_KEY}")
             lateinit var urlConnection: HttpsURLConnection
             try {
                 urlConnection = uri.openConnection() as HttpsURLConnection
                 urlConnection.requestMethod = "GET"
                 urlConnection.setRequestProperty(
                     "Authorization",
-                    "Bearer " + BuildConfig.THEMOVIEDB_API_KEY
+                    "Bearer " + BuildConfig.THEMOVIEDB_API4_READ_TOKEN
                 )
                 urlConnection.setRequestProperty(
                     "Content-Type",
@@ -82,7 +82,7 @@ class DetailsService(name: String = "DetailsService") : IntentService(name) {
 
     private fun onSuccessResponse(movieInListDTO: MovieInListDTO) {
         putLoadResult(DETAILS_RESPONSE_SUCCESS_EXTRA)
-        broadcastIntent.putExtra(DETAILS_LOAD_RESULT_EXTRA, movieInListDTO)
+        broadcastIntent.putExtra(MOVIE_EXTRA, movieInListDTO)
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent)
     }
 

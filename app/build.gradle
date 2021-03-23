@@ -22,8 +22,10 @@ android {
     buildTypes.each {
         Properties properties = new Properties()
         properties.load(project.rootProject.file("apikey.properties").newDataInputStream())
-        def apiKey  = properties.getProperty("themoviedb_api_key", "")
-        it.buildConfigField "String", "THEMOVIEDB_API_KEY", apiKey
+        def apiKey  = properties.getProperty("themoviedb_api3_key", "")
+        it.buildConfigField "String", "THEMOVIEDB_API3_KEY", apiKey
+        def apiReadToken  = properties.getProperty("themoviedb_api4_read_token", "")
+        it.buildConfigField "String", "THEMOVIEDB_API4_READ_TOKEN", apiReadToken
     }
 
     buildFeatures {

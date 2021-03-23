@@ -35,7 +35,7 @@ class RepositoryImpl : Repository {
                     urlConnection.requestMethod = "GET"
                     urlConnection.setRequestProperty(
                         "Authorization",
-                        "Bearer " + BuildConfig.THEMOVIEDB_API_KEY
+                        "Bearer " + BuildConfig.THEMOVIEDB_API4_READ_TOKEN
                     )
                     urlConnection.setRequestProperty(
                         "Content-Type",
