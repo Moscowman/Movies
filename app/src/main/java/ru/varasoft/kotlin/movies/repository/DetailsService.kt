@@ -1,8 +1,7 @@
-package ru.varasoft.kotlin.movies.view.details
+package ru.varasoft.kotlin.movies.repository
 
 import android.app.IntentService
 import android.content.Intent
-import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -10,6 +9,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
 import ru.varasoft.kotlin.movies.BuildConfig
 import ru.varasoft.kotlin.movies.model.MovieInListDTO
+import ru.varasoft.kotlin.movies.view.details.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.MalformedURLException

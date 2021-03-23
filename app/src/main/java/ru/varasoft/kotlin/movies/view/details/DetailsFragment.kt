@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import ru.varasoft.kotlin.movies.databinding.FragmentDetailsBinding
 import ru.varasoft.kotlin.movies.model.MovieInListDTO
+import ru.varasoft.kotlin.movies.repository.DetailsService
 
 val ACTION_LOAD_MOVIE = "ru.varasoft.kotlin.movies.model.action.load_movies"
 val MOVIE_EXTRA = "ru.varasoft.kotlin.movies.model.extra.MOVIE"

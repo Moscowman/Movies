@@ -1,12 +1,12 @@
-package ru.varasoft.kotlin.movies.model
+package ru.varasoft.kotlin.movies.repository
 
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import ru.varasoft.kotlin.movies.BuildConfig
+import ru.varasoft.kotlin.movies.model.MovieInListDTO
+import ru.varasoft.kotlin.movies.model.MoviesListPage
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.MalformedURLException
