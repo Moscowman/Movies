@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import ru.varasoft.kotlin.movies.R
 import ru.varasoft.kotlin.movies.databinding.FragmentMainReleasedMovieRecycleItemBinding
 import ru.varasoft.kotlin.movies.model.MovieDTO
@@ -63,13 +65,17 @@ class MainFragmentAdapter(private var onItemViewClickListener: MainFragment.OnIt
         private val binding get() = _binding
 
         fun bind(item: MovieDTO) {
-            with (binding) {
+            with(binding) {
                 movieNameTextView.text = item.title
                 ratingTextView.text = item.vote_average.toString()
                 yearOfReleaseTextView.text = item.release_date
                 posterImageView.setImageResource(R.drawable.abstract_poster)
                 ratingImageView.setImageResource(R.drawable.star)
             }
+            Glide.with(itemView)
+                .load("https://www.themoviedb.org/t/p/w600_and_h900_bestv2${item.poster_path}")
+                .apply(RequestOptions().override(300, 450))
+                .into(binding.posterImageView);
             itemView.setOnClickListener { onItemViewClickListener?.onItemViewClick(item) }
         }
     }
