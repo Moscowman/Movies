@@ -2,6 +2,8 @@ package ru.varasoft.kotlin.movies.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.Observer
+import ru.varasoft.kotlin.movies.ConnectivityListener
 import ru.varasoft.kotlin.movies.R
 import ru.varasoft.kotlin.movies.view.main.MainFragment
 
@@ -14,5 +16,6 @@ class MainActivity : AppCompatActivity() {
                     .replace(R.id.container, MainFragment.newInstance())
                     .commitNow()
         }
+
     }
 }

@@ -1,6 +1,6 @@
 package ru.varasoft.kotlin.movies.model
 
 interface Repository{
-    fun getMovieFromServer(): Movie
-    fun getMoviesFromLocalStorage(): List<Movie>
+    fun getMoviesFromServer(): List<MovieInListDTO>
+    fun getMoviesFromLocalStorage(): List<MovieInListDTO>
 }
