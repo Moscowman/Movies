@@ -25,16 +25,16 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val movie = arguments?.getParcelable<Movie>(BUNDLE_EXTRA)
-        if (movie != null) {
-            binding.movieOriginalName.text = movie.originalName
-            binding.movieRussianName.text = movie.russianName
-            binding.genres.text = movie.russianName
-            binding.length.text = "$movie.length мин."
-            binding.rating.text = "$movie.rating (${movie.usersRated})"
-            binding.budget.text = "Бюджет: ${movie.budget}"
-            binding.revenue.text = "Сборы: ${movie.revenue}"
-            binding.releaseDate.text = movie.releaseDate.toString()
-            binding.plot.text = movie.plot
+        if (movie != null) binding.apply {
+            movieOriginalName.text = movie.originalName
+            movieRussianName.text = movie.russianName
+            genres.text = movie.russianName
+            length.text = "$movie.length мин."
+            rating.text = "$movie.rating (${movie.usersRated})"
+            budget.text = "Бюджет: ${movie.budget}"
+            revenue.text = "Сборы: ${movie.revenue}"
+            releaseDate.text = movie.releaseDate.toString()
+            plot.text = movie.plot
         }
     }
 
@@ -47,10 +47,6 @@ class DetailsFragment : Fragment() {
 
         const val BUNDLE_EXTRA = "weather"
 
-        fun newInstance(bundle: Bundle): DetailsFragment {
-            val fragment = DetailsFragment()
-            fragment.arguments = bundle
-            return fragment
-        }
+        fun newInstance(bundle: Bundle): DetailsFragment = DetailsFragment().apply { arguments = bundle }
     }
 }

@@ -47,7 +47,7 @@ class MainFragment : Fragment() {
         binding.mainFragmentReleasedMoviesRecyclerView.adapter = releasedMovieAdapter
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
-        viewModel.getMovieFromLocalSource()
+        viewModel.getMoviesFromLocalSource()
     }
 
     private fun renderData(appState: AppState) {
@@ -62,12 +62,21 @@ class MainFragment : Fragment() {
             }
             is AppState.Error -> {
                 binding.loadingLayout.visibility = View.GONE
-                Snackbar
-                    .make(binding.mainView, getString(R.string.error), Snackbar.LENGTH_INDEFINITE)
-                    .setAction(getString(R.string.reload)) { viewModel.getMovieFromLocalSource() }
-                    .show()
+                binding.mainFragmentRootView.showSnackBar(
+                    getString(R.string.error),
+                    getString(R.string.reload),
+                    { viewModel.getMoviesFromLocalSource() })
             }
         }
+    }
+
+    private fun View.showSnackBar(
+        text: String,
+        actionText: String,
+        action: (View) -> Unit,
+        length: Int = Snackbar.LENGTH_INDEFINITE
+    ) {
+        Snackbar.make(this, text, length).setAction(actionText, action).show()
     }
 
     override fun onDestroyView() {
