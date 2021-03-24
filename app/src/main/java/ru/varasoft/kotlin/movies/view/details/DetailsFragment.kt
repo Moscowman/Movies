@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.bumptech.glide.Glide
+import ru.varasoft.kotlin.movies.R
 import ru.varasoft.kotlin.movies.databinding.FragmentDetailsBinding
 import ru.varasoft.kotlin.movies.model.MovieDTO
 import ru.varasoft.kotlin.movies.repository.DetailsService
@@ -97,7 +99,6 @@ class DetailsFragment : Fragment() {
         }
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -113,6 +114,7 @@ class DetailsFragment : Fragment() {
             releaseDate.text = movie.release_date
             plot.text = movie.overview
         }
+        Glide.with(this).load("https://www.themoviedb.org/t/p/w600_and_h900_bestv2${movie.poster_path}").into(binding.imageView);
     }
 
     companion object {

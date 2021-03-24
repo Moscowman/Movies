@@ -6,11 +6,13 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.varasoft.kotlin.movies.BuildConfig
+import ru.varasoft.kotlin.movies.R
 import ru.varasoft.kotlin.movies.model.MovieDTO
 import ru.varasoft.kotlin.movies.view.details.*
 import ru.varasoft.kotlin.movies.viewmodel.AppState
