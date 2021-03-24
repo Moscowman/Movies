@@ -6,20 +6,19 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.varasoft.kotlin.movies.R
 import ru.varasoft.kotlin.movies.databinding.FragmentMainReleasedMovieRecycleItemBinding
-import ru.varasoft.kotlin.movies.model.MovieInListDTO
-import java.util.*
+import ru.varasoft.kotlin.movies.model.MovieDTO
 
 class MainFragmentAdapter(private var onItemViewClickListener: MainFragment.OnItemViewClickListener?) :
     RecyclerView.Adapter<MainFragmentAdapter.ReleasedMovieViewHolder>() {
 
     private var recycleType: Int = TYPE_RELEASED_MOVIE
-    private var movieData: List<MovieInListDTO> = listOf()
+    private var movieData: List<MovieDTO> = listOf()
 
     fun setRecycleType(type: Int) {
         recycleType = type
     }
 
-    fun setMovies(data: List<MovieInListDTO>) {
+    fun setMovies(data: List<MovieDTO>) {
         movieData = data
         notifyDataSetChanged()
     }
@@ -63,7 +62,7 @@ class MainFragmentAdapter(private var onItemViewClickListener: MainFragment.OnIt
             FragmentMainReleasedMovieRecycleItemBinding.bind(itemView)
         private val binding get() = _binding
 
-        fun bind(item: MovieInListDTO) {
+        fun bind(item: MovieDTO) {
             with (binding) {
                 movieNameTextView.text = item.title
                 ratingTextView.text = item.vote_average.toString()

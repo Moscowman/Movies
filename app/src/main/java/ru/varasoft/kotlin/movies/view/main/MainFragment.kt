@@ -14,7 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 import ru.varasoft.kotlin.movies.ConnectivityListener
 import ru.varasoft.kotlin.movies.R
 import ru.varasoft.kotlin.movies.databinding.FragmentMainBinding
-import ru.varasoft.kotlin.movies.model.MovieInListDTO
+import ru.varasoft.kotlin.movies.model.MovieDTO
 import ru.varasoft.kotlin.movies.view.details.DetailsFragment
 import ru.varasoft.kotlin.movies.view.details.MOVIE_EXTRA
 import ru.varasoft.kotlin.movies.viewmodel.AppState
@@ -26,7 +26,7 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var viewModel: MainViewModel
     private val releasedMovieAdapter = MainFragmentAdapter(object : OnItemViewClickListener {
-        override fun onItemViewClick(movie: MovieInListDTO) {
+        override fun onItemViewClick(movie: MovieDTO) {
             val manager = activity?.supportFragmentManager
             if (manager != null) {
                 val bundle = Bundle()
@@ -107,7 +107,7 @@ class MainFragment : Fragment() {
     }
 
     interface OnItemViewClickListener {
-        fun onItemViewClick(movie: MovieInListDTO)
+        fun onItemViewClick(movie: MovieDTO)
     }
 
     companion object {

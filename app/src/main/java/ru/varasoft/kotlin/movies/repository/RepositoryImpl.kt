@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import ru.varasoft.kotlin.movies.BuildConfig
-import ru.varasoft.kotlin.movies.model.MovieInListDTO
+import ru.varasoft.kotlin.movies.model.MovieDTO
 import ru.varasoft.kotlin.movies.model.MoviesListPage
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -16,13 +16,13 @@ import javax.net.ssl.HttpsURLConnection
 
 class RepositoryImpl : Repository {
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun getMoviesFromServer(): List<MovieInListDTO> = loadMoviesList()
+    override fun getMoviesFromServer(): List<MovieDTO> = loadMoviesList()
 
-    override fun getMoviesFromLocalStorage(): List<MovieInListDTO> = listOf()
+    override fun getMoviesFromLocalStorage(): List<MovieDTO> = listOf()
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun loadMoviesList(): List<MovieInListDTO> {
-        var moviesList: MutableList<MovieInListDTO> = mutableListOf()
+    private fun loadMoviesList(): List<MovieDTO> {
+        var moviesList: MutableList<MovieDTO> = mutableListOf()
         try {
             var totalPages = 1
             var page = 1
@@ -48,7 +48,7 @@ class RepositoryImpl : Repository {
                     val moviesListPageDTO: MoviesListPage =
                         Gson().fromJson(getLines(bufferedReader), MoviesListPage::class.java)
 
-                    for (movie: MovieInListDTO in moviesListPageDTO.results) {
+                    for (movie: MovieDTO in moviesListPageDTO.results) {
                         moviesList.add(movie)
                     }
                     totalPages = moviesListPageDTO.total_pages

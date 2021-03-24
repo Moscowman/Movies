@@ -1,8 +1,8 @@
 package ru.varasoft.kotlin.movies.repository
 
-import ru.varasoft.kotlin.movies.model.MovieInListDTO
+import ru.varasoft.kotlin.movies.model.MovieDTO
 
 interface Repository{
-    fun getMoviesFromServer(): List<MovieInListDTO>
-    fun getMoviesFromLocalStorage(): List<MovieInListDTO>
+    fun getMoviesFromServer(): List<MovieDTO>
+    fun getMoviesFromLocalStorage(): List<MovieDTO>
 }

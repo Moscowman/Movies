@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class MovieInListDTO (
+data class MovieDTO (
     val genre_ids: Array<Int>,
     val id: Int?,
     val original_language: String?,
