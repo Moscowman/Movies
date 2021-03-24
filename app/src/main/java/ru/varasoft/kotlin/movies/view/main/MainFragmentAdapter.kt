@@ -75,13 +75,15 @@ class MainFragmentAdapter(private var onItemViewClickListener: MainFragment.OnIt
         private val binding get() = _binding
 
         override fun bind(item: Movie) {
-            binding.russianNameTextView.text = item.russianName
-            binding.ratingTextView.text = item.rating.toString()
-            val calendar: Calendar = Calendar.getInstance()
-            calendar.setTime(item.releaseDate ?: Date())
-            binding.yearOfReleaseTextView.text = calendar.get(Calendar.YEAR).toString()
-            binding.posterImageView.setImageResource(R.drawable.abstract_poster)
-            binding.ratingImageView.setImageResource(R.drawable.star)
+            with (binding) {
+                russianNameTextView.text = item.russianName
+                ratingTextView.text = item.rating.toString()
+                val calendar: Calendar = Calendar.getInstance()
+                calendar.setTime(item.releaseDate ?: Date())
+                yearOfReleaseTextView.text = calendar.get(Calendar.YEAR).toString()
+                posterImageView.setImageResource(R.drawable.abstract_poster)
+                ratingImageView.setImageResource(R.drawable.star)
+            }
         }
     }
 

@@ -12,7 +12,7 @@ class MainViewModel(
 
     fun getLiveData() = liveDataToObserve
 
-    fun getMovieFromLocalSource() = getDataFromLocalSource()
+    fun getMoviesFromLocalSource() = getDataFromLocalSource()
 
     fun getMovieFromRemoteSource() = getDataFromLocalSource()
 
@@ -20,7 +20,7 @@ class MainViewModel(
         liveDataToObserve.value = AppState.Loading
         Thread {
             Thread.sleep(1000)
-            liveDataToObserve.postValue(AppState.Success(repositoryImpl.getMovieFromLocalStorage()))
+            liveDataToObserve.postValue(AppState.Success(repositoryImpl.getMoviesFromLocalStorage()))
         }.start()
     }
 }
