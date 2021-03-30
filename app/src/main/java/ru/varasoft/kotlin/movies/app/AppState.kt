@@ -1,4 +1,4 @@
-package ru.varasoft.kotlin.movies.viewmodel
+package ru.varasoft.kotlin.movies.app
 
 import ru.varasoft.kotlin.movies.model.MovieDTO
 

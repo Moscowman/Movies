@@ -17,7 +17,7 @@ import ru.varasoft.kotlin.movies.databinding.FragmentMainBinding
 import ru.varasoft.kotlin.movies.model.MovieDTO
 import ru.varasoft.kotlin.movies.view.details.DetailsFragment
 import ru.varasoft.kotlin.movies.view.details.MOVIE_EXTRA
-import ru.varasoft.kotlin.movies.viewmodel.AppState
+import ru.varasoft.kotlin.movies.app.AppState
 import ru.varasoft.kotlin.movies.viewmodel.MainViewModel
 
 class MainFragment : Fragment() {
@@ -72,13 +72,13 @@ class MainFragment : Fragment() {
             is AppState.Success -> {
                 val moviesData = appState.movieData
                 releasedMovieAdapter.setMovies(moviesData)
-                binding.loadingLayout.visibility = View.GONE
+                binding.includedLoadingLayout.loadingLayout.visibility = View.GONE
             }
             is AppState.Loading -> {
-                binding.loadingLayout.visibility = View.VISIBLE
+                binding.includedLoadingLayout.loadingLayout.visibility = View.VISIBLE
             }
             is AppState.Error -> {
-                binding.loadingLayout.visibility = View.GONE
+                binding.includedLoadingLayout.loadingLayout.visibility = View.GONE
                 binding.mainFragmentRootView.showSnackBar(
                     getString(R.string.error),
                     getString(R.string.reload),

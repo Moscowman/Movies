@@ -9,12 +9,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.bumptech.glide.Glide
 import ru.varasoft.kotlin.movies.R
+import ru.varasoft.kotlin.movies.app.AppState
 import ru.varasoft.kotlin.movies.databinding.FragmentDetailsBinding
 import ru.varasoft.kotlin.movies.model.MovieDTO
 import ru.varasoft.kotlin.movies.repository.DetailsService
+import ru.varasoft.kotlin.movies.utils.showSnackBar
+import ru.varasoft.kotlin.movies.viewmodel.DetailsViewModel
 
 val ACTION_LOAD_MOVIE = "ru.varasoft.kotlin.movies.model.action.load_movies"
 val MOVIE_EXTRA = "ru.varasoft.kotlin.movies.model.extra.MOVIE"
@@ -35,6 +39,9 @@ class DetailsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var movieBundle: MovieDTO? = null
+
+    private val viewModel: DetailsViewModel by lazy { ViewModelProvider(this).get(DetailsViewModel::class.java) }
+
 
     private val loadResultsReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -81,21 +88,33 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        movieBundle = arguments?.getParcelable(MOVIE_EXTRA)
-        getMovie()
+        movieBundle = arguments?.getParcelable(MOVIE_EXTRA) ?: MovieDTO(-1)
+        viewModel.detailsLiveData.observe(viewLifecycleOwner, { renderData(it) })
+        viewModel.getMovieFromRemoteSource(movieBundle!!.id ?: -1)
     }
 
-    private fun getMovie() {
-        binding.mainView.visibility = View.GONE
-        binding.loadingLayout.visibility = View.VISIBLE
-        context?.let {
-            it.startService(Intent(it, DetailsService::class.java).apply {
-                action = ACTION_LOAD_MOVIE
-                putExtra(
-                    MOVIE_EXTRA,
-                    movieBundle?.id
-                )
-            })
+    private fun renderData(appState: AppState) {
+        when (appState) {
+            is AppState.Success -> {
+                binding.mainView.visibility = View.VISIBLE
+                binding.includedLoadingLayout.loadingLayout.visibility = View.GONE
+                displayMovie(appState.movieData[0])
+            }
+            is AppState.Loading -> {
+                binding.mainView.visibility = View.GONE
+                binding.includedLoadingLayout.loadingLayout.visibility = View.VISIBLE
+            }
+            is AppState.Error -> {
+                binding.mainView.visibility = View.VISIBLE
+                binding.includedLoadingLayout.loadingLayout.visibility = View.GONE
+                binding.mainView.showSnackBar(
+                    getString(R.string.error),
+                    getString(R.string.reload),
+                    {
+                        if (movieBundle != null)
+                            viewModel.getMovieFromRemoteSource(movieBundle!!.id ?: -1)
+                    })
+            }
         }
     }
 
@@ -107,14 +126,16 @@ class DetailsFragment : Fragment() {
     private fun displayMovie(movie: MovieDTO) {
         with(binding) {
             mainView.visibility = View.VISIBLE
-            loadingLayout.visibility = View.GONE
+            includedLoadingLayout.loadingLayout.visibility = View.GONE
             movieOriginalName.text = movie.original_title
             movieRussianName.text = movie.title
             rating.text = "${movie.vote_average}"
             releaseDate.text = movie.release_date
             plot.text = movie.overview
         }
-        Glide.with(this).load("https://www.themoviedb.org/t/p/w600_and_h900_bestv2${movie.poster_path}").into(binding.imageView);
+        Glide.with(this)
+            .load("https://www.themoviedb.org/t/p/w600_and_h900_bestv2${movie.poster_path}")
+            .into(binding.imageView);
     }
 
     companion object {

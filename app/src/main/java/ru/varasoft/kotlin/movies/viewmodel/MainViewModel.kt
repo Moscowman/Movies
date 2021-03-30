@@ -2,12 +2,13 @@ package ru.varasoft.kotlin.movies.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import ru.varasoft.kotlin.movies.app.AppState
 import ru.varasoft.kotlin.movies.repository.Repository
 import ru.varasoft.kotlin.movies.repository.RepositoryImpl
 
 class MainViewModel(
-        private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData(),
-        private val repositoryImpl: Repository = RepositoryImpl()
+    private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData(),
+    private val repositoryImpl: Repository = RepositoryImpl()
 ) : ViewModel() {
 
     fun getLiveData() = liveDataToObserve

@@ -3,25 +3,16 @@ package ru.varasoft.kotlin.movies.repository
 import android.app.IntentService
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.bumptech.glide.Glide
-import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ru.varasoft.kotlin.movies.BuildConfig
-import ru.varasoft.kotlin.movies.R
 import ru.varasoft.kotlin.movies.model.MovieDTO
 import ru.varasoft.kotlin.movies.view.details.*
-import ru.varasoft.kotlin.movies.viewmodel.AppState
+import ru.varasoft.kotlin.movies.app.AppState
 import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.MalformedURLException
-import java.net.URL
 import java.util.stream.Collectors
-import javax.net.ssl.HttpsURLConnection
 
 private const val SERVER_ERROR = "Ошибка сервера"
 
