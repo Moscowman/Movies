@@ -1,0 +1,53 @@
+package ru.varasoft.kotlin.movies.view.history
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
+import ru.varasoft.kotlin.movies.R
+import ru.varasoft.kotlin.movies.model.MovieDTO
+
+class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.RecyclerItemViewHolder>() {
+
+    private var data: List<MovieDTO> = arrayListOf()
+
+    fun setData(data: List<MovieDTO>) {
+        this.data = data
+        notifyDataSetChanged()
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerItemViewHolder {
+        return RecyclerItemViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.fragment_history_recyclerview_item, parent, false) as View
+        )
+    }
+
+    override fun onBindViewHolder(holder: RecyclerItemViewHolder, position: Int) {
+        holder.bind(data[position])
+    }
+
+    override fun getItemCount(): Int {
+        return data.size
+    }
+
+    inner class RecyclerItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+        fun bind(data: MovieDTO) {
+            if (layoutPosition != RecyclerView.NO_POSITION) {
+                itemView.findViewById<TextView>(R.id.recyclerViewItem).text =
+                    String.format("%s", data.title)
+                itemView.setOnClickListener {
+                    Toast.makeText(
+                        itemView.context,
+                        "on click: ${data.title}",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
+            }
+        }
+    }
+}
