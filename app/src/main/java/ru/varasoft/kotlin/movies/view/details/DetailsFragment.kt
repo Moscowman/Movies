@@ -42,7 +42,6 @@ class DetailsFragment : Fragment() {
 
     private val viewModel: DetailsViewModel by lazy { ViewModelProvider(this).get(DetailsViewModel::class.java) }
 
-
     private val loadResultsReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.getStringExtra(DETAILS_LOAD_RESULT_EXTRA)) {
@@ -125,6 +124,7 @@ class DetailsFragment : Fragment() {
 
     private fun displayMovie(movie: MovieDTO) {
         with(binding) {
+            saveMovie(movie)
             mainView.visibility = View.VISIBLE
             includedLoadingLayout.loadingLayout.visibility = View.GONE
             movieOriginalName.text = movie.original_title
@@ -136,6 +136,10 @@ class DetailsFragment : Fragment() {
         Glide.with(this)
             .load("https://www.themoviedb.org/t/p/w600_and_h900_bestv2${movie.poster_path}")
             .into(binding.imageView);
+    }
+
+    private fun saveMovie(movie: MovieDTO) {
+        viewModel.saveMovieToDB(movie)
     }
 
     companion object {

@@ -15,7 +15,7 @@
         android:theme="@style/Theme.Movies">
         <service
             android:name=".repository.DetailsService"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <activity android:name=".view.MainActivity">
             <intent-filter>
