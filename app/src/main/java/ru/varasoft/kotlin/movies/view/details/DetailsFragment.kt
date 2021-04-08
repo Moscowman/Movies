@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide
 import ru.varasoft.kotlin.movies.R
 import ru.varasoft.kotlin.movies.app.AppState
 import ru.varasoft.kotlin.movies.databinding.FragmentDetailsBinding
+import ru.varasoft.kotlin.movies.googlemaps.GoogleMapsFragment
 import ru.varasoft.kotlin.movies.model.MovieDTO
 import ru.varasoft.kotlin.movies.repository.DetailsService
 import ru.varasoft.kotlin.movies.utils.showSnackBar
@@ -102,14 +103,27 @@ class DetailsFragment : Fragment() {
         movieBundle = arguments?.getParcelable(MOVIE_EXTRA) ?: MovieDTO(-1)
         viewModel.detailsLiveData.observe(viewLifecycleOwner, { renderData(it) })
         viewModel.getMovieFromRemoteSource(movieBundle!!.id ?: -1)
-        binding.mainFragmentFABLocation.setOnClickListener { checkPermission() }
-
+        binding.detailsFragmentFABLocation.setOnClickListener {
+            checkPermission()
+            val manager = activity?.supportFragmentManager
+            if (manager != null) {
+            manager.apply {
+                beginTransaction()
+                    .add(R.id.container, GoogleMapsFragment())
+                    .addToBackStack("")
+                    .commitAllowingStateLoss()
+            }
+            }
+        }
     }
 
     private fun checkPermission() {
         activity?.let {
             when {
-                ContextCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                ContextCompat.checkSelfPermission(
+                    it,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) ==
                         PackageManager.PERMISSION_GRANTED -> {
                     getLocation()
                 }
@@ -262,7 +276,7 @@ class DetailsFragment : Fragment() {
                     location.longitude,
                     1
                 )
-                mainFragmentFAB.post {
+                binding.movieRussianName.post {
                     showAddressDialog(addresses[0].getAddressLine(0), location)
                 }
             } catch (e: IOException) {
@@ -277,15 +291,11 @@ class DetailsFragment : Fragment() {
                 .setTitle(getString(R.string.dialog_address_title))
                 .setMessage(address)
                 .setPositiveButton(getString(R.string.dialog_address_get_weather)) { _, _ ->
-                    openDetailsFragment(
-                        Weather(
-                            City(
-                                address,
-                                location.latitude,
-                                location.longitude
-                            )
+                    /*openDetailsFragment(
+                        MovieDTO(
+                            1
                         )
-                    )
+                    )*/
                 }
                 .setNegativeButton(getString(R.string.dialog_button_close)) { dialog, _ -> dialog.dismiss() }
                 .create()
